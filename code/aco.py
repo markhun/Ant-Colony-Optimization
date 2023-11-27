@@ -1,9 +1,11 @@
-from enviroment import Enviroment
-from ant import Ant
+from .enviroment import Enviroment
+from .ant import Ant
 import copy
 from statistics import mean, stdev
 import json
 import numpy as np
+import time
+import sys
 
 
 class ACO:
