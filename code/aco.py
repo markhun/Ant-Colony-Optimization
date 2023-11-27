@@ -63,6 +63,10 @@ class ACO:
         results_control = {}
         all_times = []
         fastest_path = []
+
+        start_time = time.time()
+        best_result_per_iteration = {}
+
         for cycle_number in range(self.cycles):
             this_cycle_times = []
             # Get the updated graph:
@@ -108,11 +112,27 @@ class ACO:
                 }
             )
 
+            self._printProgress(
+                min(this_cycle_times), cycle_number, time.time() - start_time
+            )
+
+            best_result_per_iteration[cycle_number] = min(this_cycle_times)
+
         # generating file with fitness through cycles
-        json.dump(results_control, open("ACO_cycles_results.json", "w"))
+        # json.dump( results_control, open( "ACO_cycles_results.json", 'w' ) )
         # Print results:
         print("---------------------------------------------------")
         print("Mean: ", mean(all_times))
         print("Standard deviation: ", stdev(all_times))
         print("BEST PATH TIME: ", min(all_times), " seconds")
         print("---------------------------------------------------")
+
+        return best_result_per_iteration, min(all_times)
+
+    def _printProgress(self, bestValue, iterations, timeElapsed):
+        sys.stdout.write(
+            "\rIterations: {0} | Best result found {1} | Time elapsed: {2}s".format(
+                iterations, bestValue, int(timeElapsed)
+            )
+        )
+        sys.stdout.flush()
